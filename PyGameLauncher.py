@@ -45,7 +45,7 @@ MARKET_DB = "./games_market.db"
 BUILTIN_MARKET = {
     "pychat": {
         "name": "PyChat - 你的休闲搭子",
-        "repo": "Git32Design/Python-Chat---Project--003",
+        "repo": "Git32-Design/Python-Chat---Project--003",
         "branch": "master",
         "description": "基于 Python 的多人在线聊天应用",
         "startup_script": "client.py",
@@ -53,7 +53,7 @@ BUILTIN_MARKET = {
     },
     "pycmd": {
         "name": "PYcmd",
-        "repo": "Git32Design/logrec-and-PYcmd",
+        "repo": "Git32-Design/logrec-and-PYcmd",
         "branch": "main",
         "description": "个人工具集合",
         "startup_script": "PYcmd/PYcmd.py",
@@ -62,8 +62,15 @@ BUILTIN_MARKET = {
     # 可以添加更多游戏/项目
 }
 
-BUILTIN_EMARKET = {  # 新增插件商店，后来可能会开发pges(PyGame Extension Script)语言
-    
+BUILTIN_EMARKET = { 
+    "pges": {
+        "name": "PyGame Extension Script",
+        "repo": "Git32-Design/PyGame-Extension-Script",
+        "branch": "master",
+        "description": "PyGame 扩展脚本语言，用于扩展 PyGame 的功能，为插件脚本依赖，插件现在只允许PGES脚本，未来可能会支持其他语言",
+        "startup_script": "pges.py",
+        "category": "依赖"
+    }
 }
 class GitHubGameDownloader:
     """使用 Git 下载/更新游戏"""
@@ -79,8 +86,7 @@ class GitHubGameDownloader:
             subprocess.run(
                 ["git", "--version"],
                 capture_output=True,
-                check=True,
-                shell=True
+                check=True
             )
             return True
         except (subprocess.CalledProcessError, FileNotFoundError):
@@ -137,8 +143,7 @@ class GitHubGameDownloader:
                 cmd,
                 capture_output=True,
                 text=True,
-                check=True,
-                shell=True
+                check=True
             )
             return game_path
         except subprocess.CalledProcessError as e:
@@ -157,8 +162,7 @@ class GitHubGameDownloader:
                 ["git", "pull"],
                 capture_output=True,
                 text=True,
-                check=True,
-                shell=True
+                check=True
             )
             return game_path
         except subprocess.CalledProcessError as e:
@@ -178,8 +182,7 @@ class GitHubGameDownloader:
                 ["git", "describe", "--tags", "--abbrev=0"],
                 capture_output=True,
                 text=True,
-                check=True,
-                shell=True
+                check=True
             )
             return result.stdout.strip()
         except subprocess.CalledProcessError:
@@ -187,8 +190,7 @@ class GitHubGameDownloader:
                 ["git", "rev-parse", "--short", "HEAD"],
                 capture_output=True,
                 text=True,
-                check=True,
-                shell=True
+                check=True
             )
             return result.stdout.strip()
     
@@ -572,10 +574,10 @@ class PyGameLauncherCLI:
             return
         
         # 检查是否已安装
-        actual_dir = self._get_actual_game_dir(normalized_id)
-        if actual_dir:
+        if self.market.is_installed(normalized_id):
+            actual_dir = normalized_id
             print(f"⚠ 游戏已安装: {actual_dir}")
-            print(f"   如需更新，请使用: pgl run \"{actual_dir}\"")
+            print(f"   如需更新，请使用: pgl update {actual_dir}")
             return
         
         try:
