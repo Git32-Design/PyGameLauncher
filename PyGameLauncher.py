@@ -62,7 +62,9 @@ BUILTIN_MARKET = {
     # 可以添加更多游戏/项目
 }
 
-
+BUILTIN_EMARKET = {  # 新增插件商店，后来可能会开发pges(PyGame Extension Script)语言
+    
+}
 class GitHubGameDownloader:
     """使用 Git 下载/更新游戏"""
     
